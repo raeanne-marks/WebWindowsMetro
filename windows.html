@@ -132,11 +132,8 @@
 				}
 			}
 		}
-	
-		function distributeTiles() {
-			console.log(tiles.length);
-			console.log(window.innerWidth);
-			if (window.innerWidth <= 1000) {
+
+		function distributeTiles1Col() {
 				console.log("One");
 				// Put them all in a single column
 				tileSpread = document.getElementById("tile-spread");
@@ -155,8 +152,9 @@
 					}
 				}
 				tileSpread.appendChild(col);
-			}
-			else if (window.innerWidth <= 1800) {
+		}
+	
+		function distributeTiles2Col() {
 				console.log("Two");
 				// Two columns
 				var i = 0;
@@ -181,8 +179,9 @@
 					}
 					tileSpread.appendChild(col);
 				}
-			}
-			else {
+		}
+
+		function distributeTiles3Col() {
 				// Three columns
 				console.log("Three");
 				var i = 0;
@@ -208,6 +207,19 @@
 					tileSpread.appendChild(col);
 					console.log("Append " + cols);
 				}
+		}
+
+		function distributeTiles() {
+			console.log(tiles.length);
+			console.log(window.innerWidth);
+			if (window.innerWidth <= 1000) {
+				distributeTiles1Col();
+			}
+			else if (window.innerWidth <= 1800) {
+				distributeTiles2Col();
+			}
+			else {
+				distributeTiles3Col();
 			}
 		}
 		
