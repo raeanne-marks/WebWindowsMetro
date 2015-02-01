@@ -180,12 +180,12 @@
 				tileSpread = document.getElementById("tile-spread");
 				var col = document.createElement("section");
 				col.className = "column";
-				for (var i = 0; i < Math.floor(tiles.length/2); i++) {
+				for (var i = 0; i < tiles.length; i++) {
 					if (tiles[i].large == true && window.innerWidth <= 480) {
 						console.log("Small tile!");
 						var smallTile = document.createElement("article");
 						smallTile.className = "tile tile-small " + tiles[i].color;
-						smallTile.appendChild(tiles[i].tileText);
+						smallTile.appendChild(tiles[i].text);
 						col.appendChild(smallTile);
 					}
 					else {
