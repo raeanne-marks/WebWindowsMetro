@@ -89,54 +89,85 @@
 	
 		var tiles = [];
 		var nrows = 0;
+		var words = ["sed", "unde", "omnis", "iste", "natus", "voluptatem",
+		"totam", "rem", "aperiam", "eaque", "ipsa", "quae", "illo", "quasi",
+		"beatae", "vitae", "dicta", "sunt", "explicabo", "nemo", "enim",
+		"ipsam", "voluptatem", "quia", "voluptas", "sit", "aspernatur", "aut",
+		"odit", "aut", "fugit", "consequuntur", "magni", "dolores", "eos",
+		"qui", "ratione", "nesciunt", "neque", "porro", "quisquam", "est",
+		"amet", "consectetur", "adipisci", "velit", "non", "numquam", "eius",
+		"modi", "tempora", "incidunt", "ut", "labore", "et", "magnam", "aliquam",
+		"quaerat", "enim", "ad", "minima", "veniam", "nostrum", "ullam",
+		"corporis", "suscipit", "laboriosam", "nisi", "aliquid", "ex", "ea",
+		"commodi", "vel", "iure", "quam", "nihil", "molestiae", "illum",
+		"fugiat", "nulla", "pariatu"];
+
+		var colorClasses = ["red", "green", "orange", "blue",
+			"indigo", "magenta", "purple", "skyblue"];
+
+		function generateWord() {
+			var wordindex = Math.floor(Math.random()*words.length);
+			return words[wordindex];
+		}
+
+		function generateSmallTile() {
+			var colorindex = Math.floor(Math.random()*(colorClasses.length));
+
+			var tileText = document.createElement("span");
+			tileText.className = "tile-text";
+			tileText.innerText = generateWord();
+
+			var newTile = document.createElement("article");
+			newTile.className = "tile tile-small " + colorClasses[colorindex];
+			newTile.appendChild(tileText);
+			return {
+					'tile': newTile,
+					'color': colorClasses[colorindex],
+					'large': false,
+					'text' : tileText
+					};
+		}
+
+		function generateLargeTile() {
+			var colorindex = Math.floor(Math.random()*(colorClasses.length));
+
+			var tileText = document.createElement("span");
+			tileText.className = "tile-text";
+			tileText.innerText = generateWord();
+
+			var newTile = document.createElement("article");
+			newTile.className = "tile tile-large " + colorClasses[colorindex];
+			newTile.appendChild(tileText);
+			return {
+					'tile': newTile,
+					'color': colorClasses[colorindex],
+					'large': true,
+					'text' : tileText
+					};
+		}
 
 		function generateTiles() {
 			// Get a random number between 34 and 64 for number of tiles
 			var numtiles = Math.floor(Math.random()*(64-34+1)) + 34;
-			var colorClasses = ["red", "green", "orange", "blue",
-				"indigo", "magenta", "purple", "skyblue"];
 		
 			while (tiles.length < numtiles) {
 				// Get a color
-				var colorindex = Math.floor(Math.random()*(colorClasses.length));
+				var colorindex = Math.floor(Math.random()*colorClasses.length);
 				// Need a 1 in 7 chance of getting a long box.
 				var longbox = Math.random() < 0.142857;
 		
 				// Only make a long box if screen is at least 480.
 				if (screen.width > 480 && longbox) {
-					var newTile = document.createElement("article");
-					newTile.className = "tile tile-large " + colorClasses[colorindex];
-					newTile.innerText = "Hello";
-					tiles.push({
-								'tile': newTile,
-								'color': colorClasses[colorindex],
-								'large': true
-							});
+					tiles.push(generateLargeTile());
 					nrows+=1;
 				}
 				else {
 					// Make two small tiles to fill a row or 1 if it's the last
 					// box
-					var newTile = document.createElement("article");
-					newTile.className = "tile tile-small " + colorClasses[colorindex];
-					newTile.innerText = "Hello";
-					tiles.push({
-								'tile': newTile,
-								'color': colorClasses[colorindex],
-								'large': false
-							});
-		
+					tiles.push(generateSmallTile());
 					if (tiles.length < numtiles) {
 						// Make second box in row. Need another color
-						colorindex = Math.floor(Math.random()*(colorClasses.length));
-						newTile = document.createElement("article");
-						newTile.className = "tile tile-small " + colorClasses[colorindex];
-						newTile.innerText = "Hello";
-						tiles.push({
-									'tile': newTile,
-									'color': colorClasses[colorindex],
-									'large': false
-								});
+						tiles.push(generateSmallTile());
 					}
 					nrows+=1;
 				}
@@ -153,8 +184,8 @@
 					if (tiles[i].large == true && window.innerWidth <= 480) {
 						console.log("Small tile!");
 						var smallTile = document.createElement("article");
-						smallTile.innerText = tiles[i].tile.innerText;
 						smallTile.className = "tile tile-small " + tiles[i].color;
+						smallTile.appendChild(tiles[i].tileText);
 						col.appendChild(smallTile);
 					}
 					else {
@@ -222,10 +253,10 @@
 		function distributeTiles() {
 			console.log(tiles.length);
 			console.log(window.innerWidth);
-			if (window.innerWidth <= 1000) {
+			if (window.innerWidth < 960) {
 				distributeTiles1Col();
 			}
-			else if (window.innerWidth <= 1800) {
+			else if (window.innerWidth < 1440) {
 				distributeTiles2Col();
 			}
 			else {
