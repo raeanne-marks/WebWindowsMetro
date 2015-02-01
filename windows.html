@@ -143,7 +143,16 @@
 				var col = document.createElement("section");
 				col.className = "column";
 				for (var i = 0; i < Math.floor(tiles.length/2); i++) {
-					col.appendChild(tiles[i].tile);
+					if (tiles[i].large == true) {
+						console.log("Small tile!");
+						var smallTile = document.createElement("article");
+						smallTile.innerText = tiles[i].tile.innerText;
+						smallTile.className = "tile tile-small " + tiles[i].color;
+						col.appendChild(smallTile);
+					}
+					else {
+						col.appendChild(tiles[i].tile);
+					}
 				}
 				tileSpread.appendChild(col);
 			}
@@ -201,12 +210,29 @@
 				}
 			}
 		}
+		
+		function clearTiles() {
+			tileSpread = document.getElementById("tile-spread");
+			while (tileSpread.firstChild) {
+				console.log("Removing child");
+				tileSpread.removeChild(tileSpread.firstChild);
+			}
+		}
 	
+		// Initial loading of page
 		$(document).ready(function() {
 					console.log("Document ready");
 					generateTiles();
 					distributeTiles();
+
+					// Redistribute tiles when window is resized
+					$(window).resize(function() {
+								console.log("Resizing");
+								clearTiles();
+								distributeTiles();
+							});
 				});
+
 	
 	</script>
 		
