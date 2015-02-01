@@ -21,6 +21,13 @@
 		.tile.tile-large {
 			width: 385px;
 		}
+		.tile-text {
+			position: absolute;
+			font-family: Verdana, Arial, sans-serif;
+			bottom: 6px;
+			left: 12px;
+		}
+
 		.red {
 			background-color: firebrick;
 		}
@@ -46,12 +53,10 @@
 			background-color: purple;
 		}
 
-		.tile-text {
-			position: absolute;
-			font-family: Verdana, Arial, sans-serif;
-			bottom: 6px;
-			left: 12px;
+		.column {
+			width: 396px;
 		}
+
 		@media screen and (max-width: 500px) {
 			body {
 				background-color: black;
@@ -63,7 +68,6 @@
 			}
 			.column {
 				margin: 0px auto;
-				width: 396px; //Two boxes plus 11px between
 			}
 		}
 		@media screen and (min-width: 501px) {
@@ -76,7 +80,6 @@
 			}
 			.column {
 				float: left;
-				width: 396px; 
 				margin-left: 56px;
 			}
 		}
