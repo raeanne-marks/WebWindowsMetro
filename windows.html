@@ -140,7 +140,7 @@
 				var col = document.createElement("section");
 				col.className = "column";
 				for (var i = 0; i < Math.floor(tiles.length/2); i++) {
-					if (tiles[i].large == true) {
+					if (tiles[i].large == true && window.innerWidth <= 480) {
 						console.log("Small tile!");
 						var smallTile = document.createElement("article");
 						smallTile.innerText = tiles[i].tile.innerText;
