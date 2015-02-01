@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<meta charset="utf-8" />
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Rae's 483</title>
+	<script type="text/javascript" src="jquery-2.1.3.min.js"></script>
+	<style type="text/css">
+		.tile {
+			float: left;
+			position: relative;
+			color: white;
+			height: 187px;
+			margin-bottom: 11px;
+		}
+		.tile.tile-small {
+			width: 187px;
+			margin-right: 11px;
+		}
+		.tile.tile-large {
+			width: 385px;
+		}
+		.red {
+			background-color: firebrick;
+		}
+		.green {
+			background-color: green;
+		}
+		.orange {
+			background-color: orangered;
+		}
+		.magenta {
+			background-color: deeppink;
+		}
+		.skyblue {
+			background-color: dodgerblue;
+		}
+		.blue {
+			background-color: blue;
+		}
+		.indigo {
+			background-color: indigo;
+		}
+		.purple {
+			background-color: purple;
+		}
+
+		.tile-text {
+			position: absolute;
+			font-family: Verdana, Arial, sans-serif;
+			bottom: 6px;
+			left: 12px;
+		}
+		@media screen and (max-width: 500px) {
+			.tiles {
+				background-color: red;
+				width: 500px;
+				margin: 70px auto auto 0px;
+			}
+			.column {
+				margin: 0px auto;
+				width: 396px; //Two boxes plus 11px between
+			}
+		}
+		@media screen and (min-width: 501px) {
+			.tiles {
+				margin: 70px auto;
+			}
+			.column {
+				float: left;
+				width: 396px; 
+				margin-left: 56px;
+			}
+		}
+	</style>
+	
+	<script type="text/javascript">
+	
+		var tiles = [];
+		var nrows = 0;
+
+		function generateTiles() {
+			// Get a random number between 34 and 64 for number of tiles
+			var numtiles = Math.floor(Math.random()*(64-34+1)) + 34;
+			var colorClasses = ["red", "green", "orange", "blue",
+				"indigo", "magenta", "purple", "skyblue"];
+		
+			while (tiles.length < numtiles) {
+				// Get a color
+				var colorindex = Math.floor(Math.random()*(colorClasses.length));
+				// Need a 1 in 7 chance of getting a long box.
+				var longbox = Math.random() < 0.142857;
+		
+				// Only make a long box if screen is at least 480.
+				if (screen.width > 480 && longbox) {
+					var newTile = document.createElement("article");
+					newTile.className = "tile tile-large " + colorClasses[colorindex];
+					newTile.innerText = "Hello";
+					tiles.push({
+								'tile': newTile,
+								'color': colorClasses[colorindex],
+								'large': true
+							});
+					nrows+=1;
+				}
+				else {
+					// Make two small tiles to fill a row or 1 if it's the last
+					// box
+					var newTile = document.createElement("article");
+					newTile.className = "tile tile-small " + colorClasses[colorindex];
+					newTile.innerText = "Hello";
+					tiles.push({
+								'tile': newTile,
+								'color': colorClasses[colorindex],
+								'large': false
+							});
+		
+					if (tiles.length < numtiles) {
+						// Make second box in row. Need another color
+						colorindex = Math.floor(Math.random()*(colorClasses.length));
+						newTile = document.createElement("article");
+						newTile.className = "tile tile-small " + colorClasses[colorindex];
+						newTile.innerText = "Hello";
+						tiles.push({
+									'tile': newTile,
+									'color': colorClasses[colorindex],
+									'large': false
+								});
+					}
+					nrows+=1;
+				}
+			}
+		}
+	
+		function distributeTiles() {
+			console.log(tiles.length);
+			console.log(window.innerWidth);
+			if (window.innerWidth <= 1000) {
+				console.log("One");
+				// Put them all in a single column
+				tileSpread = document.getElementById("tile-spread");
+				var col = document.createElement("section");
+				col.className = "column";
+				for (var i = 0; i < Math.floor(tiles.length/2); i++) {
+					col.appendChild(tiles[i].tile);
+				}
+				tileSpread.appendChild(col);
+			}
+			else if (window.innerWidth <= 1800) {
+				console.log("Two");
+				// Two columns
+				var i = 0;
+				tileSpread = document.getElementById("tile-spread");
+
+				for (var cols = 0; cols < 2; cols++) {
+					var col = document.createElement("section");
+					col.className = "column";
+					for (var row = 0; (row < Math.ceil(nrows/2) && i < tiles.length); row++) {
+						if (tiles[i].large == true) {
+							col.appendChild(tiles[i].tile);
+							i++;
+						}
+						else {
+							col.appendChild(tiles[i].tile);
+							i++;
+							if (i < tiles.length) {
+								col.appendChild(tiles[i].tile);
+								i++;
+							}
+						}
+					}
+					tileSpread.appendChild(col);
+				}
+			}
+			else {
+				// Three columns
+				console.log("Three");
+				var i = 0;
+				tileSpread = document.getElementById("tile-spread");
+
+				for (var cols = 0; cols < 3; cols++) {
+					var col = document.createElement("section");
+					col.className = "column";
+					for (var row = 0; (row < Math.ceil(nrows/3) && i < tiles.length); row++) {
+						if (tiles[i].large == true) {
+							col.appendChild(tiles[i].tile);
+							i++;
+						}
+						else {
+							col.appendChild(tiles[i].tile);
+							i++;
+							if (i < tiles.length) {
+								col.appendChild(tiles[i].tile);
+								i++;
+							}
+						}
+					}
+					tileSpread.appendChild(col);
+					console.log("Append " + cols);
+				}
+			}
+		}
+	
+		$(document).ready(function() {
+					console.log("Document ready");
+					generateTiles();
+					distributeTiles();
+				});
+	
+	</script>
+		
+</head>
+<body>
+	<section id="tile-spread" class="tiles">
+	</section>
+</body>
+</html>
