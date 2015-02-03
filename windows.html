@@ -7,19 +7,32 @@
 	<title>Rae's 483</title>
 	<script type="text/javascript" src="jquery-2.1.3.min.js"></script>
 	<style type="text/css">
+		#overlay {
+			visibility: hidden;
+			position: absolute;
+			left: 0px;
+			top: 0px;
+			width:100%;
+			height:100%;
+			text-align:center;
+			z-index: 1000;
+		}
+		#overlay div {
+			width:300px;
+			margin: 100px auto;
+			background-color: #fff;
+			border:1px solid #000;
+			padding:15px;
+			text-align:center;
+		}
 		.tile {
+			width: 187px;
 			float: left;
 			position: relative;
 			color: white;
 			height: 187px;
 			margin-bottom: 11px;
-		}
-		.tile.tile-small {
-			width: 187px;
 			margin-right: 11px;
-		}
-		.tile.tile-large {
-			width: 385px;
 		}
 		.tile-text {
 			position: absolute;
@@ -57,11 +70,12 @@
 			width: 396px;
 		}
 
-		@media screen and (max-width: 500px) {
+		@media screen and (max-width: 550px) {
 			body {
 				background-color: black;
 			}
 			.tiles {
+				float: bottom;
 				background-color: red;
 				width: 500px;
 				margin: 70px auto auto 0px;
@@ -70,12 +84,17 @@
 				margin: 0px auto;
 			}
 		}
-		@media screen and (min-width: 501px) {
+		@media screen and (min-width: 551px) {
+			.tile.tile-large {
+				width: 385px;
+				margin-right: 0;
+			}
 			body {
 				background-image: url("bg.png");
 				background-repeat: repeat-y;
 			}
 			.tiles {
+				float: bottom;
 				margin: 70px auto;
 			}
 			.column {
@@ -118,7 +137,7 @@
 			tileText.innerText = generateWord();
 
 			var newTile = document.createElement("article");
-			newTile.className = "tile tile-small " + colorClasses[colorindex];
+			newTile.className = "tile " + colorClasses[colorindex];
 			newTile.appendChild(tileText);
 			return {
 					'tile': newTile,
@@ -182,10 +201,10 @@
 				col.className = "column";
 				for (var i = 0; i < tiles.length; i++) {
 					if (tiles[i].large == true && window.innerWidth <= 480) {
-						console.log("Small tile!");
 						var smallTile = document.createElement("article");
-						smallTile.className = "tile tile-small " + tiles[i].color;
-						smallTile.appendChild(tiles[i].text);
+						smallTile.className = "tile " + tiles[i].color;
+						smallTile.appendChild(tiles[i].text.cloneNode(true));
+						console.log(smallTile);
 						col.appendChild(smallTile);
 					}
 					else {
@@ -271,6 +290,11 @@
 				tileSpread.removeChild(tileSpread.firstChild);
 			}
 		}
+
+		function overlay() {
+			el = document.getElementById("overlay");
+			el.style.visibility = (el.style.visibility == "visible") ? "hidden" : "visible";
+		}
 	
 		// Initial loading of page
 		$(document).ready(function() {
@@ -280,6 +304,7 @@
 
 					// Redistribute tiles when window is resized
 					$(window).resize(function() {
+								overlay();
 								console.log("Resizing");
 								clearTiles();
 								distributeTiles();
@@ -291,7 +316,13 @@
 		
 </head>
 <body>
-	<section id="tile-spread" class="tiles">
-	</section>
+<div>
+	<section id="tile-spread" class="tiles"></section>
+</div>
+<!--
+<div id="overlay">
+	<div></div>
+</div>
+-->
 </body>
 </html>
