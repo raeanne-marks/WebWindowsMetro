@@ -5,11 +5,17 @@
 <head>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>Rae's 483</title>
+	<link rel="stylesheet" href="font-awesome-4.3.0/css/font-awesome.min.css">
 	<script type="text/javascript" src="jquery-2.1.3.min.js"></script>
 	<style type="text/css">
+		body {
+			height:100%;
+			margin:0;
+			padding:0;
+		}
 		#overlay {
 			visibility: hidden;
-			position: absolute;
+			position: fixed;
 			left: 0px;
 			top: 0px;
 			width:100%;
@@ -19,6 +25,7 @@
 		}
 		#overlay div {
 			width:300px;
+			height:300px;
 			margin: 100px auto;
 			background-color: #fff;
 			border:1px solid #000;
@@ -33,6 +40,9 @@
 			height: 187px;
 			margin-bottom: 11px;
 			margin-right: 11px;
+			//background-image: url("dropbox.png");
+			//background-size: 205px 205px;
+			//background-position: -10px -10px;
 		}
 		.tile-text {
 			position: absolute;
@@ -40,30 +50,40 @@
 			bottom: 6px;
 			left: 12px;
 		}
+		.tile-icon {
+			position: absolute;
+			font-size: 120px;
+			left: 0px;
+			top: 30px;
+			width: 100%;
+			height: 100%;
+			text-align: center;
+			z-index: 1000;
+		}
 
 		.red {
-			background-color: firebrick;
+			background-color: #AF1A3F;
 		}
 		.green {
-			background-color: green;
+			background-color: #00A300;
 		}
 		.orange {
-			background-color: orangered;
+			background-color: #DA532C;
 		}
 		.magenta {
 			background-color: deeppink;
 		}
 		.skyblue {
-			background-color: dodgerblue;
+			background-color: #2672EC;
 		}
 		.blue {
-			background-color: blue;
+			background-color: #094DB5;
 		}
 		.indigo {
-			background-color: indigo;
+			background-color: #613CBC;
 		}
 		.purple {
-			background-color: purple;
+			background-color: #97009F;
 		}
 
 		.column {
@@ -124,9 +144,24 @@
 		var colorClasses = ["red", "green", "orange", "blue",
 			"indigo", "magenta", "purple", "skyblue"];
 
+		var iconClasses = ["fa fa-envelope", "fa fa-sun-o", "fa fa-headphones",
+		"fa fa-play", "fa fa-shopping-cart", "fa fa-camera", "fa fa-google",
+		"fa fa-trophy", "fa fa-file-text", "fa fa-file-picture-o",
+		"fa fa-google-wallet", "fa fa-facebook", "fa fa-linkedin",
+		"fa fa-pinterest-p", "fa fa-youtube", "fa fa-soundcloud",
+		"fa fa-twitter", "fa fa-skype", "fa fa-github", "fa fa-dropbox",
+		"fa fa-pied-piper", "fa fa-twitch", "fa fa-wechat",
+		"fa fa-hacker-news", "fa fa-stumbleupon", "fa fa-tumblr",
+		"fa fa-plane", "fa fa-print"];
+
 		function generateWord() {
 			var wordindex = Math.floor(Math.random()*words.length);
 			return words[wordindex];
+		}
+
+		function generateIcon() {
+			var iconindex = Math.floor(Math.random()*iconClasses.length);
+			return iconClasses[iconindex];
 		}
 
 		function generateSmallTile() {
@@ -135,15 +170,20 @@
 			var tileText = document.createElement("span");
 			tileText.className = "tile-text";
 			tileText.innerText = generateWord();
+			 
+			var tileIcon = document.createElement("span");
+			tileIcon.className = generateIcon() + " tile-icon";
 
 			var newTile = document.createElement("article");
 			newTile.className = "tile " + colorClasses[colorindex];
+			newTile.appendChild(tileIcon);
 			newTile.appendChild(tileText);
 			return {
 					'tile': newTile,
 					'color': colorClasses[colorindex],
 					'large': false,
-					'text' : tileText
+					'text' : tileText,
+					'icon' : tileIcon
 					};
 		}
 
@@ -154,14 +194,19 @@
 			tileText.className = "tile-text";
 			tileText.innerText = generateWord();
 
+			var tileIcon = document.createElement("span");
+			tileIcon.className = generateIcon() + " tile-icon";
+
 			var newTile = document.createElement("article");
 			newTile.className = "tile tile-large " + colorClasses[colorindex];
+			newTile.appendChild(tileIcon);
 			newTile.appendChild(tileText);
 			return {
 					'tile': newTile,
 					'color': colorClasses[colorindex],
 					'large': true,
-					'text' : tileText
+					'text' : tileText,
+					'icon' : tileIcon
 					};
 		}
 
@@ -291,7 +336,7 @@
 			}
 		}
 
-		function overlay() {
+		function overlay(target) {
 			el = document.getElementById("overlay");
 			el.style.visibility = (el.style.visibility == "visible") ? "hidden" : "visible";
 		}
@@ -304,11 +349,18 @@
 
 					// Redistribute tiles when window is resized
 					$(window).resize(function() {
-								overlay();
 								console.log("Resizing");
 								clearTiles();
 								distributeTiles();
 							});
+
+					$('.tile').on('click', function (e) {
+							overlay($(e.target));
+							});
+
+					//$('#overlay').on('click', function () {
+
+					//		});
 				});
 
 	
@@ -319,10 +371,8 @@
 <div>
 	<section id="tile-spread" class="tiles"></section>
 </div>
-<!--
 <div id="overlay">
-	<div></div>
+	<div id = "insideoverlay"></div>
 </div>
--->
 </body>
 </html>
