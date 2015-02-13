@@ -33,11 +33,11 @@
 			text-align:center;
 			z-index: 1000;
 		}
-		#overlay div {
+		#inneroverlay {
 			width:300px;
 			height:300px;
 			margin: 100px auto;
-			background-color: #fff;
+			text-color: white;
 			border:1px solid #000;
 			padding:15px;
 			text-align:center;
@@ -97,7 +97,7 @@
 			width: 396px;
 		}
 
-		@media screen and (max-width: 550px) {
+		@media /*screen and */(max-width: 550px) {
 			body {
 				background-color: black;
 			}
@@ -109,7 +109,7 @@
 				margin: 0px auto;
 			}
 		}
-		@media screen and (min-width: 551px) {
+		@media/* screen and*/ (min-width: 551px) {
 			.tile.tile-large {
 				width: 385px;
 				margin-right: 0;
@@ -179,18 +179,24 @@
 			tileText.innerText = generateWord();
 			 
 			var tileIcon = document.createElement("span");
-			tileIcon.className = generateIcon() + " tile-icon";
+			var icon = generateIcon();
+			tileIcon.className = icon + " tile-icon";
 
 			var newTile = document.createElement("article");
 			newTile.className = "tile " + colorClasses[colorindex];
 			newTile.appendChild(tileIcon);
 			newTile.appendChild(tileText);
+
+			var num = tiles.length;
+			newTile.id = num.toString();
+			console.log(newTile.id);
+
 			return {
 					'tile': newTile,
 					'color': colorClasses[colorindex],
 					'large': false,
 					'text' : tileText,
-					'icon' : tileIcon
+					'icon' : icon
 					};
 		}
 
@@ -202,18 +208,24 @@
 			tileText.innerText = generateWord();
 
 			var tileIcon = document.createElement("span");
-			tileIcon.className = generateIcon() + " tile-icon";
+			var icon = generateIcon();
+			tileIcon.className = icon + " tile-icon";
 
 			var newTile = document.createElement("article");
 			newTile.className = "tile tile-large " + colorClasses[colorindex];
 			newTile.appendChild(tileIcon);
 			newTile.appendChild(tileText);
+
+			var num = tiles.length;
+			newTile.id = num.toString();
+			console.log(newTile.id);
+
 			return {
 					'tile': newTile,
 					'color': colorClasses[colorindex],
 					'large': true,
 					'text' : tileText,
-					'icon' : tileIcon
+					'icon' : icon
 					};
 		}
 
@@ -310,8 +322,17 @@
 			}
 		}
 
-		function overlay(target) {
+		function overlay(tile) {
 			el = document.getElementById("overlay");
+			eld = document.getElementById("inneroverlay");
+			console.log(tile);
+			console.log("Inner div");
+			console.log(eld);
+			var index = parseInt(tile.id, 10);
+			console.log(index);
+			eld.className = tiles[index].color + " " + tiles[index].icon;
+			//eld.style.backgroundColor = purple";
+			console.log(tiles[index].color);
 			el.style.visibility = (el.style.visibility == "visible") ? "hidden" : "visible";
 		}
 	
@@ -329,7 +350,7 @@
 							});
 
 					$('.tile').on('click', function (e) {
-							overlay($(e.target));
+							overlay(e.target.parentElement);
 							});
 
 					//$('#overlay').on('click', function () {
@@ -349,7 +370,7 @@
 	<section id="tile-spread" class="tiles"></section>
 </div>
 <div id="overlay">
-	<div id = "insideoverlay"></div>
+	<div id="inneroverlay"></div>
 </div>
 </body>
 </html>
