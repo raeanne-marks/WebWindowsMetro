@@ -42,7 +42,7 @@ function generateSmallTile() {
 
 	var tileText = document.createElement("span");
 	tileText.className = "tile-text";
-	tileText.innerText = generateWord();
+	tileText.innerHTML = generateWord();
 
 	var tileIcon = document.createElement("span");
 	tileIcon.className = generateIcon() + " tile-icon";
@@ -70,7 +70,7 @@ function generateLargeTile() {
 
 	var tileText = document.createElement("span");
 	tileText.className = "tile-text";
-	tileText.innerText = generateWord();
+	tileText.innerHTML = generateWord();
 
 	var tileIcon = document.createElement("span");
 	tileIcon.className = generateIcon() + " tile-icon";
@@ -200,7 +200,7 @@ function overlay(tile) {
 
 	var txt = document.createElement("div");
 	txt.className = "tile-text modal-text";
-	txt.innerText = tiles[index].text.innerText;
+	txt.innerHTML = tiles[index].text.innerHTML;
 	eld.appendChild(txt);
 
 	console.log(tiles[index].color);
