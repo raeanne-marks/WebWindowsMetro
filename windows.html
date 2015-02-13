@@ -8,10 +8,20 @@
 	<link rel="stylesheet" href="font-awesome-4.3.0/css/font-awesome.min.css">
 	<script type="text/javascript" src="jquery-2.1.3.min.js"></script>
 	<style type="text/css">
+/*
 		body {
 			height:100%;
+			width:5000px;
 			margin:0;
 			padding:0;
+		}
+		*/
+		#title {
+			margin-top: 70px;
+			margin-left: 50px;
+			color: white;
+			font-family: Verdana, Arial, sans-serif;
+			font-size: 100px;
 		}
 		#overlay {
 			visibility: hidden;
@@ -40,9 +50,6 @@
 			height: 187px;
 			margin-bottom: 11px;
 			margin-right: 11px;
-			//background-image: url("dropbox.png");
-			//background-size: 205px 205px;
-			//background-position: -10px -10px;
 		}
 		.tile-text {
 			position: absolute;
@@ -95,9 +102,7 @@
 				background-color: black;
 			}
 			.tiles {
-				float: bottom;
-				background-color: red;
-				width: 500px;
+				width: 100%;
 				margin: 70px auto auto 0px;
 			}
 			.column {
@@ -110,12 +115,14 @@
 				margin-right: 0;
 			}
 			body {
+				height:100%;
+				width:5000px;
+				margin:0;
+				padding:0;
 				background-image: url("bg.png");
-				background-repeat: repeat-y;
 			}
 			.tiles {
-				float: bottom;
-				margin: 70px auto;
+				margin: 50px auto;
 			}
 			.column {
 				float: left;
@@ -259,16 +266,14 @@
 				tileSpread.appendChild(col);
 		}
 	
-		function distributeTiles2Col() {
-				console.log("Two");
-				// Two columns
+		function distributeTilesMultiCol() {
 				var i = 0;
 				tileSpread = document.getElementById("tile-spread");
 
-				for (var cols = 0; cols < 2; cols++) {
+				while (i < tiles.length) {
 					var col = document.createElement("section");
 					col.className = "column";
-					for (var row = 0; (row < Math.ceil(nrows/2) && i < tiles.length); row++) {
+					for (var row = 0; (row < 4 && i < tiles.length); row++) {
 						if (tiles[i].large == true) {
 							col.appendChild(tiles[i].tile);
 							i++;
@@ -283,34 +288,6 @@
 						}
 					}
 					tileSpread.appendChild(col);
-				}
-		}
-
-		function distributeTiles3Col() {
-				// Three columns
-				console.log("Three");
-				var i = 0;
-				tileSpread = document.getElementById("tile-spread");
-
-				for (var cols = 0; cols < 3; cols++) {
-					var col = document.createElement("section");
-					col.className = "column";
-					for (var row = 0; (row < Math.ceil(nrows/3) && i < tiles.length); row++) {
-						if (tiles[i].large == true) {
-							col.appendChild(tiles[i].tile);
-							i++;
-						}
-						else {
-							col.appendChild(tiles[i].tile);
-							i++;
-							if (i < tiles.length) {
-								col.appendChild(tiles[i].tile);
-								i++;
-							}
-						}
-					}
-					tileSpread.appendChild(col);
-					console.log("Append " + cols);
 				}
 		}
 
@@ -320,11 +297,8 @@
 			if (window.innerWidth < 960) {
 				distributeTiles1Col();
 			}
-			else if (window.innerWidth < 1440) {
-				distributeTiles2Col();
-			}
 			else {
-				distributeTiles3Col();
+				distributeTilesMultiCol();
 			}
 		}
 		
@@ -368,6 +342,9 @@
 		
 </head>
 <body>
+<div id="title"`>
+	<span>Rae Marks</span>
+</div>
 <div>
 	<section id="tile-spread" class="tiles"></section>
 </div>
