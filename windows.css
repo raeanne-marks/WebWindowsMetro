@@ -1,0 +1,166 @@
+body {
+	cursor: default;
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+#title {
+	margin-top: 70px;
+	margin-left: 50px;
+	color: white;
+	font-family: Verdana, Arial, sans-serif;
+	font-size: 100px;
+}
+#overlay {
+	visibility: hidden;
+	position: fixed;
+	left: 0px;
+	top: 0px;
+	width:100%;
+	height:100%;
+	text-align:center;
+	z-index: 1000;
+}
+#overlaybutton {
+	cursor: pointer;
+	position: relative;
+	bottom: -95px;
+	left: 245px;
+	margin: 0 auto;
+	width: 40px;
+	height: 40px;
+	background-color: gray;
+	overflow: auto;
+	border: 3px solid white;
+	text-align: center;
+	color: white;
+	font-family: Verdana, Arial, sans-serif;
+	font-size: 30px;
+}
+#inneroverlay {
+	position: relative;
+	width:400px;
+	height:400px;
+	margin: 100px auto;
+	border: 5px solid white;
+	padding:15px;
+	text-align:center;
+}
+.tile {
+	cursor: pointer;
+	width: 187px;
+	float: left;
+	position: relative;
+	color: white;
+	height: 187px;
+	margin-bottom: 11px;
+	margin-right: 11px;
+}
+.tile-text {
+	position: absolute;
+	font-family: Verdana, Arial, sans-serif;
+	color: white;
+	bottom: 6px;
+	left: 12px;
+}
+.tile-icon {
+	position: absolute;
+	font-size: 120px;
+	left: 0px;
+	top: 30px;
+	width: 100%;
+	height: 100%;
+	color: white;
+	text-align: center;
+	z-index: 1000;
+}
+.modal-icon {
+	font-size: 270px;
+	left: 0px;
+	top: 65px;
+	width: 100%;
+	height: 100%;
+	text-align: center;
+	z-index: 1000;
+}
+.modal-text {
+	position: absolute;
+	font-size: 50px;
+	bottom:12px;
+	left:24px;
+}
+
+.red {
+	background-color: #AF1A3F;
+}
+.green {
+	background-color: #00A300;
+}
+.orange {
+	background-color: #DA532C;
+}
+.magenta {
+	background-color: deeppink;
+}
+.skyblue {
+	background-color: #2672EC;
+}
+.blue {
+	background-color: #094DB5;
+}
+.indigo {
+	background-color: #613CBC;
+}
+.purple {
+	background-color: #97009F;
+}
+
+.column {
+	width: 396px;
+}
+
+@media (max-width: 550px) {
+	body {
+		background-color: black;
+	}
+	.tiles {
+		width: 100%;
+		margin: 70px auto auto 0px;
+	}
+	.column {
+		margin: 0px auto;
+	}
+}
+@media (min-width: 551px) {
+	.tile.tile-large {
+		width: 385px;
+		margin-right: 0;
+	}
+	body {
+		height:100%;
+		width:5000px;
+		margin:0;
+		padding:0;
+		background-image: url("bg.png");
+	}
+	.tiles {
+		margin: 50px auto;
+	}
+	.column {
+		float: left;
+		margin-left: 56px;
+	}
+}
+@media (max-width: 970px) {
+	body {
+		width: auto;
+	}
+	.column {
+		float: none;
+		margin: 0px auto;
+	}
+}
+
