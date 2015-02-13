@@ -8,14 +8,15 @@
 	<link rel="stylesheet" href="font-awesome-4.3.0/css/font-awesome.min.css">
 	<script type="text/javascript" src="jquery-2.1.3.min.js"></script>
 	<style type="text/css">
-/*
 		body {
-			height:100%;
-			width:5000px;
-			margin:0;
-			padding:0;
+			cursor: default;
+			-webkit-touch-callout: none;
+			-webkit-user-select: none;
+			-khtml-user-select: none;
+			-moz-user-select: none;
+			-ms-user-select: none;
+			user-select: none;
 		}
-		*/
 		#title {
 			margin-top: 70px;
 			margin-left: 50px;
@@ -33,16 +34,33 @@
 			text-align:center;
 			z-index: 1000;
 		}
+		#overlaybutton {
+			cursor: pointer;
+			position: relative;
+			bottom: -95px;
+			left: 245px;
+			margin: 0 auto;
+			width: 40px;
+			height: 40px;
+			background-color: gray;
+			overflow: auto;
+			border: 3px solid white;
+			text-align: center;
+			color: white;
+			font-family: Verdana, Arial, sans-serif;
+			font-size: 30px;
+		}
 		#inneroverlay {
-			width:300px;
-			height:300px;
+			position: relative;
+			width:400px;
+			height:400px;
 			margin: 100px auto;
-			text-color: white;
-			border:1px solid #000;
+			border: 5px solid white;
 			padding:15px;
 			text-align:center;
 		}
 		.tile {
+			cursor: pointer;
 			width: 187px;
 			float: left;
 			position: relative;
@@ -54,6 +72,7 @@
 		.tile-text {
 			position: absolute;
 			font-family: Verdana, Arial, sans-serif;
+			color: white;
 			bottom: 6px;
 			left: 12px;
 		}
@@ -64,8 +83,24 @@
 			top: 30px;
 			width: 100%;
 			height: 100%;
+			color: white;
 			text-align: center;
 			z-index: 1000;
+		}
+		.modal-icon {
+			font-size: 270px;
+			left: 0px;
+			top: 65px;
+			width: 100%;
+			height: 100%;
+			text-align: center;
+			z-index: 1000;
+		}
+		.modal-text {
+			position: absolute;
+			font-size: 50px;
+			bottom:12px;
+			left:24px;
 		}
 
 		.red {
@@ -97,7 +132,7 @@
 			width: 396px;
 		}
 
-		@media /*screen and */(max-width: 550px) {
+		@media (max-width: 550px) {
 			body {
 				background-color: black;
 			}
@@ -109,7 +144,7 @@
 				margin: 0px auto;
 			}
 		}
-		@media/* screen and*/ (min-width: 551px) {
+		@media (min-width: 551px) {
 			.tile.tile-large {
 				width: 385px;
 				margin-right: 0;
@@ -129,10 +164,20 @@
 				margin-left: 56px;
 			}
 		}
+		@media (max-width: 970px) {
+			body {
+				width: auto;
+			}
+			.column {
+				float: none;
+				margin: 0px auto;
+			}
+		}
 	</style>
 	
 	<script type="text/javascript">
 	
+		var vis = false;
 		var tiles = [];
 		var nrows = 0;
 		var words = ["sed", "unde", "omnis", "iste", "natus", "voluptatem",
@@ -179,8 +224,7 @@
 			tileText.innerText = generateWord();
 			 
 			var tileIcon = document.createElement("span");
-			var icon = generateIcon();
-			tileIcon.className = icon + " tile-icon";
+			tileIcon.className = generateIcon() + " tile-icon";
 
 			var newTile = document.createElement("article");
 			newTile.className = "tile " + colorClasses[colorindex];
@@ -196,7 +240,7 @@
 					'color': colorClasses[colorindex],
 					'large': false,
 					'text' : tileText,
-					'icon' : icon
+					'icon' : tileIcon
 					};
 		}
 
@@ -208,8 +252,11 @@
 			tileText.innerText = generateWord();
 
 			var tileIcon = document.createElement("span");
+			tileIcon.className = generateIcon() + " tile-icon";
+			/*
 			var icon = generateIcon();
 			tileIcon.className = icon + " tile-icon";
+			*/
 
 			var newTile = document.createElement("article");
 			newTile.className = "tile tile-large " + colorClasses[colorindex];
@@ -225,7 +272,7 @@
 					'color': colorClasses[colorindex],
 					'large': true,
 					'text' : tileText,
-					'icon' : icon
+					'icon' : tileIcon
 					};
 		}
 
@@ -237,7 +284,7 @@
 				// Get a color
 				var colorindex = Math.floor(Math.random()*colorClasses.length);
 				// Need a 1 in 7 chance of getting a long box.
-				var longbox = Math.random() < 0.142857;
+				var longbox = Math.random() < 0.2;
 		
 				// Only make a long box if screen is at least 480.
 				if (screen.width > 480 && longbox) {
@@ -268,6 +315,7 @@
 						var smallTile = document.createElement("article");
 						smallTile.className = "tile " + tiles[i].color;
 						smallTile.appendChild(tiles[i].text.cloneNode(true));
+						smallTile.appendChild(tiles[i].icon.cloneNode(true));
 						console.log(smallTile);
 						col.appendChild(smallTile);
 					}
@@ -323,17 +371,25 @@
 		}
 
 		function overlay(tile) {
+			bu = document.getElementById("overlaybutton");
 			el = document.getElementById("overlay");
 			eld = document.getElementById("inneroverlay");
-			console.log(tile);
-			console.log("Inner div");
-			console.log(eld);
 			var index = parseInt(tile.id, 10);
-			console.log(index);
-			eld.className = tiles[index].color + " " + tiles[index].icon;
-			//eld.style.backgroundColor = purple";
+
+			eld.className = tiles[index].color;
+			var icon = document.createElement("span");
+			icon.className = tiles[index].icon.className + " modal-icon";
+			eld.appendChild(icon);
+
+			var txt = document.createElement("div");
+			txt.className = "tile-text modal-text";
+			txt.innerText = tiles[index].text.innerText;
+			eld.appendChild(txt);
+
 			console.log(tiles[index].color);
 			el.style.visibility = (el.style.visibility == "visible") ? "hidden" : "visible";
+			vis = (el.style.visability == "visible") ? false : true; 
+			console.log(vis);
 		}
 	
 		// Initial loading of page
@@ -353,9 +409,17 @@
 							overlay(e.target.parentElement);
 							});
 
-					//$('#overlay').on('click', function () {
+					$('#overlaybutton').on('click', function (e) {
+							el = document.getElementById("overlay");
+							el.style.visibility = (el.style.visibility == "visible") ? "hidden" : "visible";
+							eld = document.getElementById("inneroverlay");
+							while(eld.firstChild) {
+								eld.removeChild(eld.firstChild);
+							}
+							vis = false;
+							});
 
-					//		});
+
 				});
 
 	
@@ -370,6 +434,7 @@
 	<section id="tile-spread" class="tiles"></section>
 </div>
 <div id="overlay">
+	<div id="overlaybutton"><div>X</div></div>
 	<div id="inneroverlay"></div>
 </div>
 </body>
